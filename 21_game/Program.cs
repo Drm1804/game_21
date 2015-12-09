@@ -11,15 +11,49 @@ namespace _21_game
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("***************************************************");
             Console.WriteLine("********************** Игра 21 ********************");
-
-            int userScore, computerScore;
-            computerScore = ConputerGame();
-            userScore = UserGame();
-
-            ResultGame(computerScore, userScore);
+            Console.WriteLine("***************************************************");
+            Console.WriteLine();
+            Console.WriteLine();
+            Game();
 
         }
+
+        static void Game()
+        {
+            bool end = false;
+            bool fist = true;
+
+            while (!end)
+            {
+                if (fist)
+                {
+                    Console.WriteLine("Для начала игры нажмите 'y', для отмены любую другую клавишу");
+                    fist = false;
+                }
+                else
+                {
+                    Console.WriteLine("Сыграть еще раз? Для согласия нажмите 'y', для отмены любую другую клавишу");
+                }
+
+                ConsoleKeyInfo enter = Console.ReadKey();
+                Console.WriteLine();
+                char y = 'y';
+                if (enter.KeyChar != y)
+                {
+                    return;
+                }
+
+                int userScore, computerScore;
+                computerScore = ConputerGame();
+                userScore = UserGame();
+
+                ResultGame(computerScore, userScore);
+
+            }
+        }
+
 
         static int ReturnCard()
         {
@@ -49,15 +83,17 @@ namespace _21_game
 
             while (score < 21)
             {
-                Console.WriteLine("Ваш счет {0}, еще карту? (нажмите да, для согласия)", score);
+                Console.WriteLine("Ваш счет {0}, еще карту? (нажмите 'y' для согласия, и 'n' для завершения кона)", score);
 
-                string answer = Console.ReadLine();
+                ConsoleKeyInfo answer = Console.ReadKey();
+                Console.WriteLine();
+                char y = 'y';
 
-                if (answer == "да" || answer == "Да" || answer == "lf")
+                if (answer.KeyChar == (char)'y' )
                 {
                     score += ReturnCard();
                 }
-                else if (answer == "нет" || answer == "Нет" || answer == "Ytn")
+                else if (answer.KeyChar == (char)'n')
                 {
                     break;
                 }
@@ -95,39 +131,6 @@ namespace _21_game
                 return;
             }
 
-
-
-
-
-
-            if (userScore == 21)
-            {
-                if (computerScore == 21)
-                {
-                    Console.WriteLine("У нас ничья. Оба игрока набрали 21 очко");
-                }
-                else
-                {
-                    Console.WriteLine("ВЫ победили");
-                }
-
-            }
-            else if (computerScore > userScore)
-            {
-                Console.WriteLine("Компьютер победил, его счет {1}, а счет пользователя {0}", userScore, computerScore);
-
-            }
-            else if (computerScore < userScore)
-            {
-                Console.WriteLine("Выйграл пользоатель, он набрал {0}, а компьютер набрал {1}", userScore, computerScore);
-
-            }
-            else
-            {
-                Console.WriteLine("Ничья! Пользователь наббрал {0}, и компьютер набрал {1}", userScore, computerScore);
-
-
-            }
         }
 
     }
