@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace _21_game
 {
     class Program
     {
+        const string nameFileData= "data.txt";
+
         static void Main(string[] args)
         {
             Console.WriteLine("***************************************************");
@@ -16,6 +14,7 @@ namespace _21_game
             Console.WriteLine("***************************************************");
             Console.WriteLine();
             Console.WriteLine();
+
             Game();
 
         }
@@ -27,6 +26,9 @@ namespace _21_game
 
             while (!end)
             {
+                string[] stat = GetGameStatistic();
+
+                Console.WriteLine("Текущий счет: пользователь: {0}, компьютер: {1}", stat[0], stat[1]);
                 if (fist)
                 {
                     Console.WriteLine("Для начала игры нажмите 'y', для отмены любую другую клавишу");
@@ -87,7 +89,6 @@ namespace _21_game
 
                 ConsoleKeyInfo answer = Console.ReadKey();
                 Console.WriteLine();
-                char y = 'y';
 
                 if (answer.KeyChar == (char)'y' )
                 {
@@ -113,11 +114,13 @@ namespace _21_game
             if ((computerScore > 21 && userScore < 21) || (computerScore != 21 && userScore == 21) || (computerScore < userScore && computerScore < 22 && userScore < 22))
             {
                 Console.WriteLine("Выйграл пользоатель, он набрал {0}, а компьютер набрал {1}", userScore, computerScore);
+                AddPoint("user");
                 return;
 
             } else if ((computerScore < 21 && userScore > 21) || (computerScore == 21 && userScore != 21) || (computerScore > userScore && computerScore < 22 && userScore < 22))
             {
                 Console.WriteLine("Компьютер победил, его счет {1}, а счет пользователя {0}", userScore, computerScore);
+                AddPoint("computer");
                 return;
 
             } else if (computerScore > 21 && userScore > 21)
@@ -131,6 +134,41 @@ namespace _21_game
                 return;
             }
 
+        }
+
+        static string[] GetGameStatistic()
+        {
+            string[] stat = {"0", "0"};
+
+            if (!File.Exists(nameFileData))
+            {
+                File.AppendAllLines(nameFileData, stat);
+            }
+            else
+            {
+                stat = File.ReadAllLines(nameFileData);
+            }
+            return stat;
+        }
+
+        static void AddPoint(string gamer)
+        {
+            string[] statistic = GetGameStatistic();
+            File.Delete(nameFileData);
+
+            if (gamer == "user")
+            {
+                int tempData = int.Parse(statistic[0]);
+                tempData++;
+                statistic[0] = tempData.ToString();
+            }
+            else if(gamer == "computer")
+            {
+                int tempData = int.Parse(statistic[1]);
+                tempData++;
+                statistic[1] = tempData.ToString();
+            }
+            File.AppendAllLines(nameFileData, statistic);
         }
 
     }
